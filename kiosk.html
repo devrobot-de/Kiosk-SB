@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiosk</title>
+
+    <style>
+        body {
+            font-family: montserat, sans-serif;
+            margin: 0;
+            font-size: 20px;
+            padding: 55px 40px;
+            background-color: #cecece;
+            background-image: url(background_pattern_ai.png);
+            background-size: 450px;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+            font-size: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-bottom: 7px;
+            border-bottom: 1px solid #023753;
+            font-weight: normal;
+            color: #4b4b4b;
+            font-size: 27px;
+        }
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-bottom: 7px;
+            border-bottom: 1px solid #023753;
+            font-weight: normal;
+            color: #4b4b4b;
+            font-size: 22px;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 10px;
+            background-color: #25E2CC;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            margin: 0 0 10px 0;
+        }
+
+        button:disabled {
+            background-color: #c5c5c5;
+        }
+
+        button:hover {
+            background-color: #FBCA18;
+        }
+
+        button:disabled:hover {
+            background-color: #c5c5c5;
+            cursor: default;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #c5c5c5;
+            font-size: 20px;
+        }
+
+        li:first-child {
+            border-top: 1px solid #c5c5c5;
+        }
+
+        .greeny {
+            color: #25E2CC;
+        }
+
+        .box {
+            padding: 25px;
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-color: rgb(230, 230, 230);
+            border-radius: 10px;
+            /*
+            box-shadow: 0 0 10px #c5c5c5;
+            */
+        }
+
+        #title {
+            margin-top: 0px;
+            background-color: #023753;
+            color: white;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            left: 0;
+            top: 0;
+        }
+
+
+
+
+        #content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .leftContent {
+            display: flex;
+            flex-direction: column;
+            width: 65%;
+        }
+
+        #inputArea {
+            text-align: center;
+        }
+
+        #inputArea #inputbuttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        #inputArea button {
+            width: 50%;
+        }
+
+        #inputArea button:first-child {
+            margin-right: 10px;
+        }
+
+        #inputfield {
+            width: 50%;
+            margin: 0 auto;
+            height: 40px;
+            font-size: 20px;
+            padding: 0 10px;
+            border-radius: 7px;
+            border: 4px solid #023753;
+            outline: none;
+        }
+
+        #errorOutput,
+        #sucessOutput {
+            text-align: center;
+            background-color: rgb(232, 106, 106);
+            color: rgb(255, 255, 255);
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: none;
+        }
+
+        #sucessOutput {
+            background-color: rgb(106, 232, 106);
+        }
+
+        #cart {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        #cart li:last-child {
+            border-bottom: none;
+        }
+
+        #cart li:hover {
+            background-color: #f5f5f5;
+        }
+
+        #cart li .left {
+            display: flex;
+            justify-content: left;
+            flex-direction: row;
+            align-items: center;
+            width: 80%;
+        }
+
+        #cart li .right {
+            display: flex;
+            justify-content: right;
+            flex-direction: row;
+            align-items: center;
+            width: 20%;
+        }
+
+        #cart .article {
+            text-align: left;
+        }
+
+        #cart button {
+            border: none;
+            border-radius: 50%;
+            padding: 10px 15px;
+            font-size: 20px;
+            margin: 0 15px 0 0;
+            width: 45px;
+        }
+
+        #overview {
+            width: 35%;
+            margin-left: 20px;
+        }
+
+        #userActive {
+            font-size: 26px;
+        }
+
+        #transactionData h2 {
+            margin-top: 20px;
+        }
+
+        #transactionData ul li:first-child,
+        #userData ul li:first-child {
+            border-top: none;
+        }
+
+        #transactionData ul li:last-child {
+            font-weight: bold;
+            color: black;
+            font-size: 26px;
+        }
+
+        #userData h3 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        #adminpanel {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="title">
+        <h1>Kiosk<span class="greeny"> SB</span></h1>
+    </div>
+
+    <div id="errorOutput" class="box">Benutzer oder Artikel nicht gefunden</div>
+    <div id="sucessOutput" class="box"></div>
+
+    <div id="content">
+        <div class="leftContent">
+            <div id="inputArea" class="box">
+                <input type="text" id="inputfield" placeholder="UserID / EAN / Betrag EUR" autofocus
+                    onkeydown="handleEnter(event)">
+                <div id="inputbuttons">
+                    <button onclick="performSearch()">Benutzer / Artikel suchen</button>
+                    <button id="btnDepositBalance" onclick="depositBalance()" disabled>Guthaben einzahlen</button>
+                </div>
+            </div>
+            <div id="cartArea" class="box">
+                <h2>Warenkorb</h2>
+                <ul id="cart">
+                    <li>Dein Warenkorb ist leer.</li>
+                </ul>
+
+                <button onclick="emptyCart()">Warenkorb leeren</button>
+            </div>
+        </div>
+
+        <div id="overview" class="box">
+            <h2>Aktuelles Profil</h2>
+            <div id="userData">
+                <ul>
+                    <li>Benutzer: <span id="userActive">Gast</span></li>
+                    <li>Kontostand: <span id="userBalance">-</span></li>
+                    <li>Zettel seit: <span id="userLastRepay">-</span></li>
+                    <li>Max. Zettel: <span id="userMaxCredit">-</span></li>
+                </ul>
+            </div>
+            <div id="checkoutButtons">
+                <button id="btnLogout" onclick="logoutUser()" disabled>Logout</button>
+            </div>
+
+            <div id="transactionData">
+                <h2>Transaktion</h2>
+                <ul>
+                    <li>Total:<span id="transTotal">0.00 EUR</span></li>
+                    <li>Guthaben:<span id="transUserBalance">0.00 EUR</span></li>
+                    <li>In Bar:<span id="transToPay">0.00 EUR</span></li>
+                </ul>
+            </div>
+
+
+
+            <div id="checkoutButtons">
+                <button onclick="payBill()">Bezahlen</button>
+                <button id="btnClaimCredit" onclick="claimCredit()" disabled>Anschreiben</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminpanel" class="box">
+        <h2>Admin Panel</h2>
+        <br>
+        <br>
+
+        <h3>Benutzerprofile</h3>
+        <div id="userStats"></div>
+        <button onclick="saveUserCSV()">Download Benutzer .CSV</button>
+        <input type="file" id="importUserCSV" style="display: none;" accept=".csv" onchange="loadUserCSV(event)">
+        <button onclick="document.getElementById('importUserCSV').click()">Benutzer aus .CSV importieren</button>
+        <button onclick="deleteUsers()">Alle Benutzer löschen</button>
+        <br>
+        <br>
+        <br>
+
+        <h3>Artikelliste</h3>
+        <div id="articleStats"></div>
+        <button onclick="saveArticleCSV()">Download Artikel .CSV</button>
+        <input type="file" id="importArticleCSV" style="display: none;" accept=".csv" onchange="loadArticleCSV(event)">
+        <button onclick="document.getElementById('importArticleCSV').click()">Artikel aus .CSV importieren</button>
+        <button onclick="deleteArticles()">Alle Artikel löschen</button>
+        <br>
+        <br>
+        <br>
+        <h3>Logout</h3>
+        <br>
+        <button onclick="logoutUser()">Admin Logout</button>
+    </div>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ########### JavaScript ########### -->
+
+<script>
+    // Basic settings
+    const useIndividualCredit = true;
+    const maxCredit = 30;
+    const maxDeposit = 50;
+    const logActive = true;
+    const autoLogoutTime = 60000; // 60000 milliseconds = 1 minute
+    let adminPanelActive = true;
+
+    // Array access constants
+    const USER_ID = 0;
+    const USER_NAME = 1;
+    const USER_MAX_CREDIT = 2;
+    const USER_LAST_REPAY = 3;
+    const USER_BALANCE = 4;
+    const USER_ADMIN = 5;
+    const ARTICLE_EAN = 0;
+    const ARTICLE_NAME = 1;
+    const ARTICLE_PRICE = 2;
+    const ADMIN_LAST_USER_BACKUP = 0;
+    const ADMIN_LAST_ARTICLE_BACKUP = 1;
+
+
+    const users = loadArrayFromLocalStorage('users') // An array with all registred users: [ID, name, maxCredit, lastRepay, balance, admin]
+    const articles = loadArrayFromLocalStorage('articles') // An array of articles: [EAN, name, price]
+    const adminLogs = loadArrayFromLocalStorage('adminLogs'); // Admin logs
+
+    const errorMessages = []; // Error messages
+    const successMessages = []; // Success messages
+    const cart = []; // [EAN, name, price, amount]
+    let activeUser = null; // The currently active user [ID, name, maxCredit, lastRepay, balance, admin]
+
+    /**
+     * Makes sure that the inputfield is focused after a click
+     * */
+    document.querySelectorAll('*').forEach(element => {
+        element.addEventListener('click', function () {
+            setTimeout(function () {
+                inputfield.focus();
+            }, 0);
+        });
+    });
+
+    /**
+     * Makes sure that the logout timer is reset after every click
+     * on a button.
+     * */
+    document.querySelectorAll('button').forEach(button => {
+        const originalOnClick = button.onclick;
+        button.onclick = function (event) {
+            startLogoutTimer();
+            if (originalOnClick) {
+                originalOnClick.call(this, event);
+            }
+        };
+    });
+
+
+
+    /**
+     * Uploads the users from a CSV file. The CSV file must contain the 
+     * following format: ID;Name;MaxCredit;LastRepay;Balance;Admin.
+     * If the user already exists, it will be skipped.
+     * */
+    function loadUserCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+
+            for (let line of lines) {
+                let [id, name, maxCredit, lastRepay, balance, admin] = line.split(';');
+
+                // If user already exists, skip
+                let userExists = false;
+                for (let user of users) {
+                    if (user[USER_ID] === id) {
+                        userExists = true;
+                    }
+                }
+                if (userExists) continue;
+
+                if (admin) {
+                    admin = admin.toLowerCase();
+                    admin = admin.trim();
+                }
+
+                let user = [id, name, parseFloat(maxCredit), lastRepay, parseFloat(balance), admin === 'true'];
+                users.push(user);
+
+            }
+            saveArrayToLocalStorage('users', users);
+            location.reload();
+        };
+        reader.readAsText(file);
+    }
+
+    /**
+     * Download the users as CSV.
+     * */
+    function saveUserCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        users.forEach(user => {
+            let row = user.join(";");
+            csvContent += row + "\r\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "users.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        let today = new Date();
+        adminLogs[ADMIN_LAST_USER_BACKUP] = today.toLocaleDateString() + " um " + today.toLocaleTimeString();
+        saveArrayToLocalStorage('adminLogs', adminLogs);
+    }
+
+    /**
+     * Delete all users from the local storage.
+     * */
+    function deleteUsers() {
+        if (confirm('Sind Sie sicher, dass Sie alle Benutzer löschen möchten?')) {
+            saveUserCSV();
+            deleteArrayFromLocalStorage('users');
+            location.reload();
+        }
+    }
+
+    /**
+     * Uploads the articles from a CSV file. The CSV file must 
+     * have the following format: EAN;Name;Price. 
+     * If the article already exists, it will be skipped.
+     * */
+    function loadArticleCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+
+            for (let line of lines) {
+                const [ean, name, price] = line.split(';');
+
+                // If article already exists, skip
+                let articleExists = false;
+                for (let article of articles) {
+                    if (article[0] === ean) {
+                        articleExists = true;
+                    }
+                }
+                if (articleExists) continue;
+
+                articles.push([ean, name, parseFloat(price)]);
+            }
+            saveArrayToLocalStorage('articles', articles);
+            location.reload();
+        };
+        reader.readAsText(file);
+    }
+
+
+    /**
+     * Download the articles as CSV.
+     * */
+    function saveArticleCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        articles.forEach(article => {
+            let row = article.join(";");
+            csvContent += row + "\r\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "articles.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        let today = new Date();
+        adminLogs[ADMIN_LAST_ARTICLE_BACKUP] = today.toLocaleDateString() + " um " + today.toLocaleTimeString();
+        saveArrayToLocalStorage('adminLogs', adminLogs);
+    }
+
+    /**
+     * Delete all articles from the local storage.
+     * */
+    function deleteArticles() {
+        if (confirm('Sind Sie sicher, dass Sie alle Artikel löschen möchten?')) {
+            deleteArrayFromLocalStorage('articles');
+            location.reload();
+        }
+    }
+
+    /**
+     * Save an array to the local storage.
+     * */
+    function saveArrayToLocalStorage(key, array) {
+        localStorage.setItem(key, JSON.stringify(array));
+    }
+
+    /**
+     * Load an array from the local storage.
+     * */
+    function loadArrayFromLocalStorage(key) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : [];
+    }
+
+    /**
+     * Delete an array from the local storage.
+     * */
+    function deleteArrayFromLocalStorage(key) {
+        localStorage.removeItem(key);
+    }
+
+    /**
+     * Handle the enter key. This function is called when the user 
+     * presses the enter key or the scanner sends a signal.
+     * */
+    function handleEnter(event) {
+        if (event.key === "Enter") {
+            performSearch();
+            startLogoutTimer();
+            event.preventDefault();
+        }
+    }
+
+    /**
+     * Perform a search. This function is called when the user 
+     * wants to search for a user or an article.
+     * */
+    function performSearch() {
+        const input = document.getElementById('inputfield');
+        const value = input.value;
+        input.value = '';
+
+        // Secret admin command
+        if (value === "Open Admin Panel") {
+            adminPanelActive = true;
+            renderView();
+            return;
+        }
+
+        // If the input is empty, show an error message
+        if (value === '') {
+            errorMessages.push('Bitte gib einen Wert ein');
+            renderView();
+            return;
+        }
+
+        // Search for a user
+        if (value.substr(0, 3) === 'USR') {
+            // Login user if found
+            activeUser = searchUser(value);
+            startLogoutTimer();
+            if (!activeUser) {
+                errorMessages.push('Benutzer nicht gefunden');
+            }
+        }
+        // Search for an article
+        else {
+            let article = searchArticle(value);
+            if (article) {
+                cart.push(article);
+            } else {
+                errorMessages.push('Benutzer oder Artikel nicht gefunden');
+            }
+        }
+        renderView();
+    }
+
+    /**
+     * Search for a user by ID.
+     * */
+    function searchUser(id) {
+        return users.find(user => user[USER_ID] === id);
+    }
+
+    /**
+     * Search for an article by EAN.
+     * */
+    function searchArticle(ean) {
+        return articles.find(article => article[ARTICLE_EAN] === ean);
+    }
+
+    /**
+     * Deposit balance. This function is called when the 
+     * user wants to deposit money.
+     * */
+    function depositBalance() {
+        const input = document.getElementById('inputfield');
+        const amount = parseFloat(input.value);
+        input.value = '';
+        if (isNaN(amount)) {
+            errorMessages.push('Ungültiger Betrag');
+            renderView();
+            return;
+        }
+        if (amount > maxDeposit) {
+            errorMessages.push('Du kannst Maximal ' + maxDeposit + ' EUR einzahlen');
+            renderView();
+            return;
+        }
+
+        activeUser[USER_BALANCE] += amount;
+        // Reset last repay date
+        if (activeUser[USER_BALANCE] > 0) {
+            activeUser[USER_LAST_REPAY] = null;
+        }
+
+        successMessages.push('Betrag erfolgreich eingezahlt');
+        saveArrayToLocalStorage('users', users);
+        renderView();
+    }
+
+    /**
+     * Logout the user. This function is called when the user 
+     * wants to logout.
+     * */
+    function logoutUser() {
+        stopLogoutTimer();
+        activeUser = null;
+        renderView();
+    }
+
+    /**
+     * Remove an item from the cart. This function is called 
+     * when the user wants to remove an item from the cart.
+     * */
+    function removeCartItem(index) {
+        cart.splice(index, 1);
+        renderView();
+    }
+
+    /**
+     * Empty the cart. This function is called when the user 
+     * wants to empty the cart.
+     * */
+    function emptyCart() {
+        cart.splice(0, cart.length);
+        renderView();
+    }
+
+    /**
+     * Pay the bill. First the balance is checked. If the 
+     * balance is enough the bill is paid from the balance. 
+     * If the balance is not enough the user has to pay the 
+     * rest in cash.
+     * */
+    function payBill() {
+        if (!activeUser) {
+            successMessages.push('Betrag als bezahlt markiert');
+            emptyCart();
+            return;
+        }
+        let total = calcCartTotal();
+
+        let balance = activeUser[USER_BALANCE];
+
+        // 1. Balance is enough
+        if (balance >= total) {
+            balance -= total;
+            activeUser[USER_BALANCE] = balance;
+        }
+
+        // 2. Balance is not enough but greater than 0
+        else if (balance > 0) {
+            balance = 0;
+            activeUser[USER_BALANCE] = balance;
+        }
+
+        successMessages.push('Betrag als bezahlt markiert');
+        saveArrayToLocalStorage('users', users);
+        emptyCart();
+    }
+
+    /**
+     * Claim the credit. If the balance is negative the user has
+     * to pay the amount of the cart.
+     * */
+    function claimCredit() {
+        let balance = activeUser[USER_BALANCE];
+        let total = calcCartTotal();
+        balance -= total;
+
+        if (useIndividualCredit) {
+            if (balance < 0 && Math.abs(balance) > activeUser[USER_MAX_CREDIT]) {
+                errorMessages.push('Du kannst maximal ' + activeUser[USER_MAX_CREDIT] + ' EUR anschreiben');
+                renderView();
+                return;
+            }
+        } else {
+            if (balance < 0 && Math.abs(balance) > maxCredit) {
+                errorMessages.push('Du kannst maximal ' + maxCredit + ' EUR anschreiben');
+                renderView();
+                return;
+            }
+        }
+
+        activeUser[USER_BALANCE] = balance;
+        if (balance < 0) {
+            activeUser[USER_LAST_REPAY] = new Date().toLocaleDateString();
+        }
+        successMessages.push('Betrag erfolgreich angeschrieben');
+        saveArrayToLocalStorage('users', users);
+        emptyCart();
+    }
+
+    /** 
+     * Calculate the total amount of the cart.
+     * */
+    function calcCartTotal() {
+        let total = 0;
+        for (let item of cart) {
+            total += item[ARTICLE_PRICE];
+        }
+        return total;
+    }
+
+    /**
+    *  Calculate the usable balance. If the balance is negative 
+    * the usable balance is 0. If the balance is positive the 
+    * usable balance is the balance itself. 
+    * */
+    function calcUsableBalance() {
+        if (!activeUser) return 0;
+        let balance = activeUser[USER_BALANCE];
+        if (balance < 0) {
+            return 0;
+        } else {
+            return balance;
+        }
+    }
+
+    /**
+     * Calculate the amount that has to be paid in cash. If the user has a positive balance the balance is subtracted from the total.
+     * */
+    function calcPayInCash() {
+        let total = calcCartTotal();
+        if (!activeUser) return total;
+
+        let balance = calcUsableBalance();
+        let payInCash = total - balance;
+
+        if (payInCash < 0) {
+            payInCash = 0;
+        }
+
+        return payInCash;
+    }
+
+    let logoutTimer = null;
+
+    function startLogoutTimer() {
+        // Only start the timer if a user is active
+        if (!activeUser) return;
+
+        let currentTimer = autoLogoutTime;
+        let logoutButton = document.getElementById('btnLogout');
+        logoutButton.innerHTML = 'Logout (' + Math.round(currentTimer / 1000) + 's)';
+
+        if (logoutTimer) {
+            clearInterval(logoutTimer);
+        }
+
+        logoutTimer = setInterval(function () {
+            currentTimer -= 1000;
+            logoutButton.innerHTML = 'Logout (' + Math.round(currentTimer / 1000) + 's)';
+            if (currentTimer <= 0) {
+                logoutUser();
+            }
+        }, 1000);
+    }
+
+    function stopLogoutTimer() {
+        let logoutButton = document.getElementById('btnLogout');
+        logoutButton.innerHTML = 'Logout';
+        clearInterval(logoutTimer);
+    }
+
+
+    /**
+     * Render the view. This function is called after every user interaction.
+     * */
+    function renderView() {
+        // ############################
+        // Output error messages
+        // ############################
+
+        let errorOutput = document.getElementById('errorOutput');
+        errorOutput.innerHTML = '';
+
+        if (errorMessages.length > 0) {
+            errorOutput.style.display = 'block';
+            // Hide the error message after 5 seconds
+            setTimeout(function () {
+                errorOutput.style.display = 'none';
+            }, 5000);
+        } else {
+            errorOutput.style.display = 'none';
+        }
+
+        for (let message of errorMessages) {
+            errorOutput.innerHTML += '<p>' + message + '</p>';
+        }
+
+        errorMessages.splice(0, errorMessages.length);
+
+        // ############################
+        // Output success messages
+        // ############################
+
+        let successOutput = document.getElementById('sucessOutput');
+        successOutput.innerHTML = '';
+
+        if (successMessages.length > 0) {
+            successOutput.style.display = 'block';
+
+            // Hide the success message after 5 seconds
+            setTimeout(function () {
+                successOutput.style.display = 'none';
+            }, 5000);
+        } else {
+            successOutput.style.display = 'none';
+        }
+
+        for (let message of successMessages) {
+            successOutput.innerHTML += '<p>' + message + '</p>';
+        }
+
+        successMessages.splice(0, successMessages.length);
+
+        // ############################
+        // Update user data
+        // ############################
+
+        // Buttons
+        let btnDepositBalance = document.getElementById('btnDepositBalance');
+        let btnLogout = document.getElementById('btnLogout');
+        let btnClaimCredit = document.getElementById('btnClaimCredit');
+
+        let userActive = document.getElementById('userActive');
+        let userBalance = document.getElementById('userBalance');
+        let userLastRepay = document.getElementById('userLastRepay');
+        let userMaxCredit = document.getElementById('userMaxCredit');
+
+
+        if (activeUser) {
+            // Buttons aktivieren
+            btnDepositBalance.disabled = false;
+            btnLogout.disabled = false;
+            btnClaimCredit.disabled = false;
+
+            userActive.innerHTML = activeUser[1];
+            userBalance.innerHTML = Math.round(activeUser[USER_BALANCE] * 100) / 100 + ' EUR' || '0 EUR';
+            userLastRepay.innerHTML = activeUser[USER_LAST_REPAY] || '-';
+            if (useIndividualCredit) {
+                userMaxCredit.innerHTML = Math.round(activeUser[USER_MAX_CREDIT] * 100) / 100 + ' EUR';
+            } else {
+                userMaxCredit.innerHTML = maxCredit + ' EUR';
+            }
+        } else {
+            // Buttons deaktivieren
+            btnDepositBalance.disabled = true;
+            btnLogout.disabled = true;
+            btnClaimCredit.disabled = true;
+
+            userActive.innerHTML = 'Gast';
+            userBalance.innerHTML = '-';
+            userLastRepay.innerHTML = '-';
+            userMaxCredit.innerHTML = '-';
+        }
+
+        // ############################
+        // Update cart
+        // ############################
+
+        let cartOutput = document.getElementById('cart');
+        cartOutput.innerHTML = '';
+
+        if (cart.length === 0) {
+            cartOutput.innerHTML = '<li>Dein Warenkorb ist leer.</li>';
+        } else {
+            for (let i = 0; i < cart.length; i++) {
+                let item = cart[i];
+                cartOutput.innerHTML += '<li><div class="left"><button onclick="removeCartItem(' + i + ')">X</button><div class="article">' + item[ARTICLE_NAME] + '</div></div><div class="right"><div>' + item[ARTICLE_PRICE] + ' EUR</div></div></li>';
+            }
+        }
+
+        // ############################	
+        // Update transaction data
+        // ############################	
+
+        let transTotalOutput = document.getElementById('transTotal');
+        let transUserBalanceOutput = document.getElementById('transUserBalance');
+        let transToPayOutput = document.getElementById('transToPay');
+
+        // Empty cart
+        if (cart.length === 0) {
+            transTotalOutput.innerHTML = '0.00 EUR';
+            transUserBalanceOutput.innerHTML = '0.00 EUR';
+            transToPayOutput.innerHTML = '0.00 EUR';
+        }
+        // Cart has items
+        else {
+            let total = calcCartTotal();
+            let userBalance = calcUsableBalance();
+            let payInCash = calcPayInCash();
+
+            transTotalOutput.innerHTML = Math.round(total * 100) / 100 + ' EUR';
+            transUserBalanceOutput.innerHTML = Math.round(userBalance * 100) / 100 + ' EUR';
+            transToPayOutput.innerHTML = Math.round(payInCash * 100) / 100 + ' EUR';
+        }
+
+
+        // ############################
+        // Admin Panel
+        // ############################
+
+        let adminpanel = document.getElementById('adminpanel');
+        let userStatsOutput = document.getElementById('userStats');
+        let articleStatsOutput = document.getElementById('articleStats');
+        if (adminPanelActive || (activeUser && activeUser[USER_ADMIN])) {
+            let openCredits = 0;
+            let sumCredit = 0;
+
+            for (let user of users) {
+                if (user[USER_BALANCE] < 0) {
+                    openCredits++;
+                    sumCredit += Math.abs(user[USER_BALANCE]);
+                }
+            }
+
+            adminpanel.style.display = 'block';
+
+            let lastUserBackup = adminLogs[ADMIN_LAST_USER_BACKUP] ? adminLogs[ADMIN_LAST_USER_BACKUP] : 'Nie';
+            let lastArticleBackup = adminLogs[ADMIN_LAST_ARTICLE_BACKUP] ? adminLogs[ADMIN_LAST_ARTICLE_BACKUP] : 'Nie';
+
+            userStatsOutput.innerHTML = "<p>Registrierte Benutzer: <b>" + users.length + "</b> | Offene Zettel: <b>" + openCredits + "</b> | Summe Zettel: <b>" + sumCredit + " EUR </b>" + " | Letztes Backup: <b>" + lastUserBackup + "</b></p>";
+
+            articleStatsOutput.innerHTML = "<p>Gespeicherte Artikel: <b>" + articles.length + "</b> | Letztes Backup: <b>" + lastArticleBackup + "</b></p>";
+
+        } else {
+            adminpanel.style.display = 'none';
+        }
+
+        window.scrollTo(0, 0);
+    }
+
+
+    renderView();
+
+</script>

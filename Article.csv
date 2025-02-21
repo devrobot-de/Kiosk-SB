@@ -1,0 +1,11 @@
+EAN;Name;Preis
+001;Buch;10
+002;Zeitschrift;5
+003;Zeitung;2
+004;Getränk;1
+005;Süßigkeit;0.5
+006;Kaugummi;0.2
+007;Kaffee;2
+008;Tee;1
+009;Wasser;0.5
+010;Energydrink;2

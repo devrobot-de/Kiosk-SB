@@ -1,0 +1,11 @@
+ID;Name;Maximaler Kredit;Zettel seit;Kontostand;Admin
+USR001;Admin;100;;0;true
+USR002;Mike;20;;10;false
+USR003;Tom;50;02.02.2025;-10;false
+USR004;Jerry;30;;5;false
+USR005;Spike;40;;0;false
+USR006;Buffy;10;01.01.2025;-3;false
+USR007;Butch;60;;0;false
+USR007;Lightning;80;01.03.2024;-62;false
+USR008;Storm;90;;12;false
+USR009;Thunder;70;;4;false
